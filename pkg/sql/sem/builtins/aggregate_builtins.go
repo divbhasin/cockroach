@@ -288,14 +288,8 @@ var aggregates = map[string]builtinDefinition{
 		),
 	)),
 
-	"variance": makeBuiltin(aggProps(),
-		makeAggOverload([]*types.T{types.Int}, types.Decimal, newIntVarianceAggregate,
-			"Calculates the variance of the selected values."),
-		makeAggOverload([]*types.T{types.Decimal}, types.Decimal, newDecimalVarianceAggregate,
-			"Calculates the variance of the selected values."),
-		makeAggOverload([]*types.T{types.Float}, types.Float, newFloatVarianceAggregate,
-			"Calculates the variance of the selected values."),
-	),
+	"variance": makeVarBuiltIn(),
+	"var_samp": makeVarBuiltIn(),
 
 	// stddev is a historical alias for stddev_samp.
 	"stddev":      makeStdDevBuiltin(),
@@ -407,6 +401,17 @@ func makeAggOverloadWithReturnType(
 		},
 		Info: info,
 	}
+}
+
+func makeVarBuiltIn() builtinDefinition {
+	return makeBuiltin(aggProps(),
+		makeAggOverload([]*types.T{types.Int}, types.Decimal, newIntVarianceAggregate,
+			"Calculates the variance of the selected values."),
+		makeAggOverload([]*types.T{types.Decimal}, types.Decimal, newDecimalVarianceAggregate,
+			"Calculates the variance of the selected values."),
+		makeAggOverload([]*types.T{types.Float}, types.Float, newFloatVarianceAggregate,
+			"Calculates the variance of the selected values."),
+	)
 }
 
 func makeStdDevBuiltin() builtinDefinition {
